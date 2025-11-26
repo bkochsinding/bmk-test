@@ -12,7 +12,7 @@ interface StatCardProps {
 const StatCard: React.FC<StatCardProps> = ({ label, value, onClick, className = '' }) => (
   <button
     onClick={onClick}
-    className={`text-left p-2.5 rounded-lg min-w-[100px] transition-colors hover:bg-gray-200/60 ${className}`}
+    className={`text-left p-2.5 rounded-lg min-w-[100px] transition-colors hover:bg-gray-200/60 dark:hover:bg-dark-bg ${className}`}
   >
     <span className="block text-2xl font-bold">{value}</span>
     <span className="block text-sm font-semibold opacity-80">{label}</span>

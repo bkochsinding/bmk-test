@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { View } from '../types.ts';
-import { ChartPieIcon, TableCellsIcon, CalendarIcon, InboxIcon, UserGroupIcon, EnvelopeIcon, Cog6ToothIcon, PlusCircleIcon, BellIcon } from './icons.tsx';
+import { ChartPieIcon, TableCellsIcon, CalendarIcon, InboxIcon, UserGroupIcon, EnvelopeIcon, Cog6ToothIcon, PlusCircleIcon, BellIcon, SunIcon, MoonIcon } from './icons.tsx';
 
 interface HeaderProps {
   currentView: View;
@@ -9,6 +9,8 @@ interface HeaderProps {
   onNewRequest: () => void;
   notificationCount: number;
   onToggleNotifications: () => void;
+  theme: string;
+  onThemeToggle: () => void;
 }
 
 const NavItem: React.FC<{
@@ -22,8 +24,8 @@ const NavItem: React.FC<{
     onClick={() => onClick(view)}
     className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-base font-semibold transition-colors ${
       currentView === view
-        ? 'bg-gray-200/80 text-gray-900'
-        : 'text-gray-600 hover:bg-gray-200/50 hover:text-gray-900'
+        ? 'bg-gray-200/80 text-gray-900 dark:bg-dark-bg dark:text-dark-text-primary'
+        : 'text-gray-600 dark:text-dark-text-secondary hover:bg-gray-200/50 dark:hover:bg-dark-bg hover:text-gray-900 dark:hover:text-dark-text-primary'
     }`}
   >
     {icon}
@@ -31,12 +33,12 @@ const NavItem: React.FC<{
   </button>
 );
 
-const Header: React.FC<HeaderProps> = ({ currentView, onViewChange, onNewRequest, notificationCount, onToggleNotifications }) => {
+const Header: React.FC<HeaderProps> = ({ currentView, onViewChange, onNewRequest, notificationCount, onToggleNotifications, theme, onThemeToggle }) => {
   return (
-    <div className="w-64 bg-gray-100/80 backdrop-blur-xl border-r border-gray-200/80 p-4 flex flex-col h-screen fixed">
+    <div className="w-64 bg-gray-100/80 dark:bg-dark-card/80 backdrop-blur-xl border-r border-gray-200/80 dark:border-dark-border p-4 flex flex-col h-screen fixed">
         <div className="flex items-center gap-2 mb-8">
-            <svg className="h-8 w-8 text-blue" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
-            <h1 className="text-xl font-bold text-gray-900">BMK Hub</h1>
+            <svg className="h-8 w-8 text-blue dark:text-dark-accent" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+            <h1 className="text-xl font-bold text-gray-900 dark:text-dark-text-primary">BMK Hub</h1>
         </div>
         <nav className="flex-1 flex flex-col gap-2">
             <NavItem view={View.Dashboard} currentView={currentView} onClick={onViewChange} icon={<TableCellsIcon className="h-5 w-5"/>}>Dashboard</NavItem>
@@ -54,16 +56,23 @@ const Header: React.FC<HeaderProps> = ({ currentView, onViewChange, onNewRequest
                 <PlusCircleIcon className="h-5 w-5"/>
                 New Request
               </button>
-            <div className="mt-4 pt-4 border-t border-gray-200/80 space-y-2">
+            <div className="mt-4 pt-4 border-t border-gray-200/80 dark:border-dark-border space-y-2">
                 <button
                     onClick={onToggleNotifications}
-                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-base font-semibold transition-colors text-gray-600 hover:bg-gray-200/50 hover:text-gray-900"
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-base font-semibold transition-colors text-gray-600 dark:text-dark-text-secondary hover:bg-gray-200/50 dark:hover:bg-dark-bg hover:text-gray-900 dark:hover:text-dark-text-primary"
                 >
                     <BellIcon className="h-5 w-5"/>
                     <span>Notifications</span>
                     {notificationCount > 0 && <span className="ml-auto bg-orange text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">{notificationCount}</span>}
                 </button>
                 <NavItem view={View.Settings} currentView={currentView} onClick={onViewChange} icon={<Cog6ToothIcon className="h-5 w-5"/>}>Settings</NavItem>
+                <button
+                    onClick={onThemeToggle}
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-base font-semibold transition-colors text-gray-600 dark:text-dark-text-secondary hover:bg-gray-200/50 dark:hover:bg-dark-bg hover:text-gray-900 dark:hover:text-dark-text-primary"
+                >
+                    {theme === 'light' ? <MoonIcon className="h-5 w-5" /> : <SunIcon className="h-5 w-5" />}
+                    <span>{theme === 'light' ? 'Dark' : 'Light'} Mode</span>
+                </button>
             </div>
         </div>
     </div>

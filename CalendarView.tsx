@@ -43,38 +43,38 @@ type DayDetailModalProps = {
 
 const DayDetailModal: React.FC<DayDetailModalProps> = ({ day, requests, postponedRequests, onClose, onSelectRequest, staleRequestIds }) => (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center" onClick={onClose}>
-        <div className="bg-white/90 backdrop-blur-xl border border-gray-200 rounded-lg shadow-xl w-full max-w-lg p-6" onClick={e => e.stopPropagation()}>
-            <h3 className="font-semibold text-lg mb-4 text-gray-900">
+        <div className="bg-white/90 dark:bg-dark-card/90 backdrop-blur-xl border border-gray-200 dark:border-dark-border rounded-lg shadow-xl w-full max-w-lg p-6" onClick={e => e.stopPropagation()}>
+            <h3 className="font-semibold text-lg mb-4 text-gray-900 dark:text-dark-text-primary">
                 Tasks for {day.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
             </h3>
             <ul className="space-y-3 max-h-96 overflow-y-auto">
                 {requests.map(req => (
                      <li key={req.id}>
-                        <button onClick={() => onSelectRequest(req)} className="w-full text-left p-3 rounded-md hover:bg-gray-100 transition-colors border border-gray-200">
+                        <button onClick={() => onSelectRequest(req)} className="w-full text-left p-3 rounded-md hover:bg-gray-100 dark:hover:bg-dark-bg transition-colors border border-gray-200 dark:border-dark-border">
                             <div className="flex items-center gap-2">
                                 <div className={`w-2 h-2 rounded-full ${statusClasses[req.status]}`} title={`Status: ${req.status}`}></div>
                                 {getRequestSourceIcon(req)}
                                 {staleRequestIds.has(req.id) && (
                                     <span title="This task is pending"><BellIcon className="h-4 w-4 text-orange"/></span>
                                 )}
-                                <p className="font-semibold text-gray-800 truncate">{req.title}</p>
+                                <p className="font-semibold text-gray-800 dark:text-dark-text-primary truncate">{req.title}</p>
                             </div>
-                             <p className="text-xs text-gray-500 mt-1 pl-4">By: {req.stakeholder} | Created: {req.creationDate}</p>
+                             <p className="text-xs text-gray-500 dark:text-dark-text-secondary mt-1 pl-4">By: {req.stakeholder} | Created: {req.creationDate}</p>
                         </button>
                     </li>
                 ))}
                 {postponedRequests.length > 0 && (
-                     <div className="mt-4 pt-4 border-t border-gray-200">
-                        <h4 className="font-semibold text-gray-600">Postponed From This Day</h4>
+                     <div className="mt-4 pt-4 border-t border-gray-200 dark:border-dark-border">
+                        <h4 className="font-semibold text-gray-600 dark:text-dark-text-secondary">Postponed From This Day</h4>
                         <ul className="space-y-2 mt-2">
                         {postponedRequests.map(req => (
                             <li key={`postponed-${req.id}`} className="opacity-60">
-                                <button onClick={() => onSelectRequest(req)} className="w-full text-left p-2 rounded-md hover:bg-gray-100 transition-colors">
+                                <button onClick={() => onSelectRequest(req)} className="w-full text-left p-2 rounded-md hover:bg-gray-100 dark:hover:bg-dark-bg transition-colors">
                                     <div className="flex items-center gap-2">
                                         <ArrowUturnRightIcon className="h-4 w-4"/>
-                                        <p className="font-semibold text-gray-700 truncate line-through">{req.title}</p>
+                                        <p className="font-semibold text-gray-700 dark:text-dark-text-secondary truncate line-through">{req.title}</p>
                                     </div>
-                                    <p className="text-xs text-gray-500 mt-1 pl-6">Moved to {req.timeline}</p>
+                                    <p className="text-xs text-gray-500 dark:text-dark-text-secondary mt-1 pl-6">Moved to {req.timeline}</p>
                                 </button>
                             </li>
                         ))}
@@ -133,10 +133,10 @@ const CalendarView: React.FC<CalendarViewProps> = ({ requests, onSelectRequest, 
         key={isGhost ? `ghost-${req.id}` : req.id}
         onClick={() => onSelectRequest(req)}
         title={isGhost ? `Moved to ${req.timeline}` : req.title}
-        className={`w-full text-left text-xs font-semibold p-1 rounded-md flex items-center gap-1.5 transition-colors ${isGhost ? 'opacity-50 hover:bg-gray-200' : 'bg-gray-100 hover:bg-gray-200'}`}
+        className={`w-full text-left text-xs font-semibold p-1 rounded-md flex items-center gap-1.5 transition-colors ${isGhost ? 'opacity-50 hover:bg-gray-200 dark:hover:bg-dark-bg' : 'bg-gray-100 dark:bg-dark-bg hover:bg-gray-200 dark:hover:bg-gray-700'}`}
       >
         <div className={`flex-shrink-0 w-1.5 h-1.5 rounded-full ${isGhost ? 'bg-gray-400' : priorityClasses[req.priority]}`}></div>
-        <div className="flex-grow flex items-center gap-1 overflow-hidden text-gray-800">
+        <div className="flex-grow flex items-center gap-1 overflow-hidden text-gray-800 dark:text-dark-text-primary">
             {isGhost ? <ArrowUturnRightIcon className="h-4 w-4 flex-shrink-0"/> : <div className={`w-2 h-2 rounded-full ${statusClasses[req.status]}`}></div>}
             {getRequestSourceIcon(req)}
             {isPending && !isGhost && <span title="This task is pending"><BellIcon className="h-4 w-4 text-orange flex-shrink-0"/></span>}
@@ -147,15 +147,15 @@ const CalendarView: React.FC<CalendarViewProps> = ({ requests, onSelectRequest, 
   };
   
   return (
-    <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200/80 p-4">
+    <div className="bg-white/70 dark:bg-dark-card/70 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200/80 dark:border-dark-border p-4">
       <div className="flex justify-between items-center mb-4 px-2">
-        <button onClick={handlePrevMonth} className="p-2 rounded-full hover:bg-gray-200"><ChevronLeftIcon className="h-6 w-6" /></button>
-        <h2 className="text-xl font-semibold">{currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</h2>
-        <button onClick={handleNextMonth} className="p-2 rounded-full hover:bg-gray-200"><ChevronRightIcon className="h-6 w-6" /></button>
+        <button onClick={handlePrevMonth} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-dark-bg"><ChevronLeftIcon className="h-6 w-6" /></button>
+        <h2 className="text-xl font-semibold dark:text-dark-text-primary">{currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</h2>
+        <button onClick={handleNextMonth} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-dark-bg"><ChevronRightIcon className="h-6 w-6" /></button>
       </div>
-      <div className="grid grid-cols-7 gap-px bg-gray-200">
+      <div className="grid grid-cols-7 gap-px bg-gray-200 dark:bg-dark-border">
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
-          <div key={d} className="text-center py-2 bg-gray-50 text-xs font-bold text-gray-500">{d}</div>
+          <div key={d} className="text-center py-2 bg-gray-50 dark:bg-dark-card text-xs font-bold text-gray-500 dark:text-dark-text-secondary">{d}</div>
         ))}
         {days.map((d, i) => {
           const dateStr = d.toDateString();
@@ -167,8 +167,8 @@ const CalendarView: React.FC<CalendarViewProps> = ({ requests, onSelectRequest, 
           const isToday = d.toDateString() === today.toDateString();
 
           return (
-            <div key={i} className={`p-1.5 min-h-[120px] bg-white ${!isCurrentMonth ? 'bg-gray-50' : ''}`}>
-              <div className={`text-sm font-semibold mb-1 ${isToday ? 'bg-blue text-white rounded-full w-6 h-6 flex items-center justify-center' : ''}`}>
+            <div key={i} className={`p-1.5 min-h-[120px] bg-white dark:bg-dark-card ${!isCurrentMonth ? 'bg-gray-50 dark:bg-dark-bg' : ''}`}>
+              <div className={`text-sm font-semibold mb-1 ${isToday ? 'bg-blue text-white rounded-full w-6 h-6 flex items-center justify-center' : 'dark:text-dark-text-primary'}`}>
                 {d.getDate()}
               </div>
               <div className="space-y-1">
