@@ -16,7 +16,6 @@ import SettingsView from './components/SettingsView.tsx';
 import CreateRequestModal from './components/CreateRequestModal.tsx';
 import NotificationCenter from './components/NotificationCenter.tsx';
 import RequestTaskModal from './components/RequestTaskModal.tsx';
-import { analyzeEmailForRequest, analyzeTeamsMessageForRequest } from './services/geminiService.ts';
 import TaskRecommender from './components/TaskRecommender.tsx';
 
 const App: React.FC = () => {
@@ -136,18 +135,30 @@ const App: React.FC = () => {
         setUsers(prev => prev.map(u => u.email === email ? {...u, functions} : u));
     };
     
-    const handleCreateRequest = async (source: Email | TeamsMessage, analysisFn: (item: any) => Promise<any>) => {
-        try {
-            const data = await analysisFn(source);
-            setInitialRequestData({ ...data, sourceItem: source });
-            setCreateModalOpen(true);
-        } catch (error) {
-            console.error("Error analyzing content:", error);
-        }
+    // Updated logic: Replaced AI analysis with direct mapping
+    const handleCreateRequestFromEmail = (email: Email) => {
+        const data: Partial<BMKRequest> = {
+            title: email.subject,
+            description: `${email.snippet}\n\n${email.body || ''}`,
+            stakeholder: email.sender,
+            track: Track.Tech, // Default
+            priority: Priority.Medium, // Default
+        };
+        setInitialRequestData({ ...data, sourceItem: email });
+        setCreateModalOpen(true);
     };
 
-    const handleAnalyzeEmail = (email: Email) => handleCreateRequest(email, analyzeEmailForRequest);
-    const handleAnalyzeTeamsMessage = (message: TeamsMessage) => handleCreateRequest(message, analyzeTeamsMessageForRequest);
+    const handleCreateRequestFromTeams = (message: TeamsMessage) => {
+         const data: Partial<BMKRequest> = {
+            title: `Request from ${message.sender}`,
+            description: message.message,
+            stakeholder: message.sender,
+            track: Track.Tech, // Default
+            priority: Priority.Medium, // Default
+        };
+        setInitialRequestData({ ...data, sourceItem: message });
+        setCreateModalOpen(true);
+    };
 
     const handleFinalizeRequest = (requestData: Partial<BMKRequest> & { sourceItem?: Email | TeamsMessage }) => {
         const newId = `BMK-${(requests.length + 1).toString().padStart(3, '0')}`;
@@ -164,9 +175,11 @@ const App: React.FC = () => {
         setRequests(newRequests);
 
         if (requestData.sourceItem) {
-            if ('sender' in requestData.sourceItem) {
+            if ('sender' in requestData.sourceItem && 'subject' in requestData.sourceItem) {
+                // It's an email
                 setEmails(prev => prev.map(e => e.id === (requestData.sourceItem as Email).id ? { ...e, requestID: newId } : e));
             } else {
+                // It's a teams message
                 setTeamsMessages(prev => prev.map(m => m.id === (requestData.sourceItem as TeamsMessage).id ? { ...m, requestID: newId } : m));
             }
         }
@@ -191,8 +204,8 @@ const App: React.FC = () => {
         switch (currentView) {
             case View.Progress: return <ProgressView requests={requests} />;
             case View.Calendar: return <CalendarView requests={requests} onSelectRequest={handleSelectRequest} staleRequestIds={new Set(staleRequests.map(r => r.id))} />;
-            case View.Inbox: return <InboxView emails={emails} onAnalyzeEmail={handleAnalyzeEmail} />;
-            case View.Teams: return <TeamsView messages={teamsMessages} onAnalyzeMessage={handleAnalyzeTeamsMessage} />;
+            case View.Inbox: return <InboxView emails={emails} onCreateRequest={handleCreateRequestFromEmail} />;
+            case View.Teams: return <TeamsView messages={teamsMessages} onCreateRequest={handleCreateRequestFromTeams} />;
             case View.Emails: return <EmailsView requests={requests} onSelectRequest={handleSelectRequest} />;
             case View.Settings: return <SettingsView users={users} currentUserEmail={currentUserEmail} setCurrentUserEmail={setCurrentUserEmail} onUpdateUserFunctions={handleUpdateUserFunctions} />;
             case View.Dashboard:
