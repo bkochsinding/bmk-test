@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
+        darkMode: 'class',
         theme: {
           extend: {
             fontFamily: {
@@ -14,24 +15,30 @@
             },
             colors: {
               'gray-50': '#F9F9FB',
-              'gray-100': '#F2F2F7', // fog-gray
+              'gray-100': '#F2F2F7',
               'gray-200': '#E5E5EA',
-              'gray-300': '#D1D1D6', // border-gray
+              'gray-300': '#D1D1D6',
               'gray-400': '#C7C7CC',
-              'gray-500': '#8E8E93', // placeholder-gray
+              'gray-500': '#8E8E93',
               'gray-600': '#636366',
               'gray-700': '#3A3A3C',
-              'gray-800': '#1C1C1E', // graphite-gray
-              'gray-900': '#0D0D0D', // ink-black
-              
+              'gray-800': '#1C1C1E',
+              'gray-900': '#0D0D0D',
               'card': '#FFFFFF',
-
-              'blue': '#007AFF', // azure-glow
-              'green': '#34C759', // emerald-mist
-              'orange': '#FF9500', // amber-beam
-              'red': '#FF3B30', // crimson-pulse
+              'blue': '#007AFF',
+              'green': '#34C759',
+              'orange': '#FF9500',
+              'red': '#FF3B30',
               'purple': '#AF52DE',
               'teal': '#5AC8FA',
+              dark: {
+                'bg': '#1C1C1E',
+                'card': '#2C2C2E',
+                'border': '#3A3A3C',
+                'text-primary': '#F2F2F7',
+                'text-secondary': '#8E8E93',
+                'accent': '#0A84FF',
+              }
             }
           }
         }

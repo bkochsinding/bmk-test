@@ -48,18 +48,18 @@ const RequestListItem: React.FC<{ request: BMKRequest; onSelectRequest: (request
 
   return (
     <div
-      className="bg-card rounded-xl border border-gray-200/80 hover:shadow-lg transition-shadow duration-300 cursor-pointer flex items-center p-4 gap-4 group"
+      className="bg-card dark:bg-dark-card rounded-xl border border-gray-200/80 dark:border-dark-border hover:shadow-lg transition-shadow duration-300 cursor-pointer flex items-center p-4 gap-4 group"
       onClick={() => onSelectRequest(request)}
     >
       {/* Main Info */}
       <div className="flex-grow">
         <div className="flex items-center gap-3 mb-1.5">
           {getRequestSourceIcon(request)}
-          <span className="text-sm font-semibold text-gray-400">{request.id}</span>
-          <h3 className="font-semibold text-base text-gray-900 leading-tight">{request.title}</h3>
+          <span className="text-sm font-semibold text-gray-400 dark:text-dark-text-secondary">{request.id}</span>
+          <h3 className="font-semibold text-base text-gray-900 dark:text-dark-text-primary leading-tight">{request.title}</h3>
         </div>
-        <p className="text-sm text-gray-500 ml-8">
-          Stakeholder: <span className="font-medium text-gray-700">{request.stakeholder}</span>
+        <p className="text-sm text-gray-500 dark:text-dark-text-secondary ml-8">
+          Stakeholder: <span className="font-medium text-gray-700 dark:text-dark-text-primary">{request.stakeholder}</span>
         </p>
       </div>
 
@@ -69,7 +69,7 @@ const RequestListItem: React.FC<{ request: BMKRequest; onSelectRequest: (request
         <div className={`px-2.5 py-1 text-xs font-semibold rounded-full ${priorityClasses[request.priority]}`}>
           {request.priority}
         </div>
-        <div className="flex items-center gap-2 text-sm font-semibold text-gray-700 w-28">
+        <div className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-dark-text-primary w-28">
           <div className={`w-2.5 h-2.5 rounded-full ${statusClasses[request.status]}`}></div>
           <span>{request.status}</span>
         </div>
@@ -79,13 +79,13 @@ const RequestListItem: React.FC<{ request: BMKRequest; onSelectRequest: (request
       <div className="flex-shrink-0 flex items-center gap-3 ml-2">
         <button
           onClick={handleVoteClick}
-          className="flex items-center gap-1.5 text-gray-500 hover:text-orange font-bold py-1 px-2 rounded-lg transition-colors bg-gray-100 hover:bg-orange/10"
+          className="flex items-center gap-1.5 text-gray-500 dark:text-dark-text-secondary hover:text-orange font-bold py-1 px-2 rounded-lg transition-colors bg-gray-100 dark:bg-dark-bg hover:bg-orange/10"
           aria-label={`Support ${request.title}`}
         >
           <StarIcon className="h-4 w-4" />
           <span className="text-sm">{request.votes}</span>
         </button>
-        <ChevronRightIcon className="h-6 w-6 text-gray-300 group-hover:text-gray-500 transition-colors" />
+        <ChevronRightIcon className="h-6 w-6 text-gray-300 dark:text-dark-border group-hover:text-gray-500 dark:group-hover:text-dark-text-secondary transition-colors" />
       </div>
     </div>
   );
@@ -94,7 +94,7 @@ const RequestListItem: React.FC<{ request: BMKRequest; onSelectRequest: (request
 
 const RequestListView: React.FC<RequestListViewProps> = ({ requests, onSelectRequest, onVote }) => {
   if (requests.length === 0) {
-    return <div className="text-center py-16 text-gray-500 bg-card rounded-xl border border-gray-200/80">No requests match the current filters.</div>;
+    return <div className="text-center py-16 text-gray-500 dark:text-dark-text-secondary bg-card dark:bg-dark-card rounded-xl border border-gray-200/80 dark:border-dark-border">No requests match the current filters.</div>;
   }
   return (
     <div className="space-y-2.5">

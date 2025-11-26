@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { BMKRequest, View, Track, Priority, SortOption, Status, RequestSource, Email, TeamsMessage, User, Comment } from './types.ts';
 import { MOCK_REQUESTS, MOCK_EMAILS, MOCK_TEAMS_MESSAGES, MOCK_USERS, TRACK_OWNERS } from './constants.ts';
 import Header from './components/Header.tsx';
@@ -32,6 +32,19 @@ const App: React.FC = () => {
     const [isManualCreateModalOpen, setManualCreateModalOpen] = useState(false);
     const [initialRequestData, setInitialRequestData] = useState<Partial<BMKRequest> & { sourceItem?: Email | TeamsMessage }>({});
     const [isNotificationCenterOpen, setNotificationCenterOpen] = useState(false);
+    const [theme, setTheme] = useState('light');
+
+    useEffect(() => {
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    }, [theme]);
+
+    const handleThemeToggle = () => {
+        setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+    };
     
     // Filters
     const [trackFilter, setTrackFilter] = useState<Track | 'all'>('all');
@@ -214,8 +227,8 @@ const App: React.FC = () => {
                     <div className="space-y-6">
                         <div className="flex justify-between items-start">
                              <div>
-                                <h2 className="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h2>
-                                <p className="mt-1 text-lg text-gray-600">Overview of all active and pending requests.</p>
+                                <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-dark-text-primary">Dashboard</h2>
+                                <p className="mt-1 text-lg text-gray-600 dark:text-dark-text-secondary">Overview of all active and pending requests.</p>
                              </div>
                              <StatCards
                                 totalRequests={requests.length}
@@ -241,13 +254,15 @@ const App: React.FC = () => {
     };
 
     return (
-        <div className="bg-gray-50 min-h-screen">
+        <div className="bg-gray-50 min-h-screen dark:bg-dark-bg">
             <Header 
                 currentView={currentView} 
                 onViewChange={setCurrentView}
                 onNewRequest={() => setManualCreateModalOpen(true)}
                 notificationCount={staleRequests.length}
                 onToggleNotifications={() => setNotificationCenterOpen(p => !p)}
+                theme={theme}
+                onThemeToggle={handleThemeToggle}
             />
             {isNotificationCenterOpen && (
                 <NotificationCenter 
